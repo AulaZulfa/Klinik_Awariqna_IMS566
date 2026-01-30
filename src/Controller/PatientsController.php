@@ -176,6 +176,9 @@ class PatientsController extends AppController
         $patient = $this->Patients->newEmptyEntity();
         if ($this->request->is('post')) {
             $patient = $this->Patients->patchEntity($patient, $this->request->getData());
+            
+            $patient->user_id = $this->Authentication->getIdentity()->getIdentifier();
+            
             if ($this->Patients->save($patient)) {
                 $this->Flash->success(__('The patient has been saved.'));
 

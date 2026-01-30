@@ -51,6 +51,10 @@ class PatientsTable extends Table
     // Pastikan behavior ini ada
     $this->addBehavior('Search.Search');
 
+    $this->belongsTo('Users', [
+        'foreignKey' => 'user_id',
+    ]);
+
     // PADAM kod lama, GANTI dengan ini sahaja:
     $this->searchManager()
         ->add('name', 'Search.Like', [
