@@ -34,6 +34,7 @@ class Patient extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
+        'user_id' => true,
         'name' => true,
         'email' => true,
         'ic' => true,
