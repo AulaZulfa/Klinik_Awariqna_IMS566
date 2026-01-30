@@ -227,7 +227,15 @@ class AppointmentsController extends AppController
         if ($this->request->is('post')) {
             $appointment = $this->Appointments->patchEntity($appointment, $this->request->getData());
             
-            $appointment->user_id = $this->Authentication->getIdentity()->getIdentifier();
+            // 1. Dapatkan Patient ID yang Admin pilih dalam form
+        $patientId = $this->request->getData('patient_id');
+
+        // 2. Cari rekod Patient tu untuk tengok user_id dia
+        $patient = $this->Appointments->Patients->get($patientId);
+
+        // 3. Ambil user_id dari Patient dan masukkan ke dalam Appointment
+        // Ini memastikan appointment tu "melekat" pada akaun user pesakit tu
+        $appointment->user_id = $patient->user_id;
             
             if ($this->Appointments->save($appointment)) {
                 $this->Flash->success(__('The appointment has been saved.'));
@@ -265,6 +273,14 @@ class AppointmentsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $appointment = $this->Appointments->patchEntity($appointment, $this->request->getData());
+            
+            $patientId = $this->request->getData('patient_id');
+        $patient = $this->Appointments->Patients->get($patientId);
+        
+        // Pastikan user_id dari profil pesakit masuk ke temujanji
+        $appointment->user_id = $patient->user_id;
+        // -------------------------------------
+            
             if ($this->Appointments->save($appointment)) {
                 $this->Flash->success(__('The appointment has been saved.'));
 
